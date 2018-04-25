@@ -61,11 +61,10 @@ const app = http.createServer((req, res) => {
 
       if (parsedRequest.method === 'POST' && parsedRequest.url.pathname === '/api/cowsay') {
         if (!parsedRequest.body.text) {
-          res.writeHead(400, { 'Content-Type': 'text/plain' });
+          res.writeHead(400, { 'Content-Type': 'application/json' });
           res.write(JSON.stringify({ error: 'invalid request: text query required' }));
         } else {
           res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.write(JSON.stringify(parsedRequest.body));
           const cowsayText = cowsay.say({ text: parsedRequest.body.text });
           res.write(JSON.stringify({
             content: `${cowsayText}`,
@@ -82,11 +81,11 @@ const app = http.createServer((req, res) => {
     })
     .catch((err) => {
       if (err instanceof SyntaxError) {
-        res.writeHead(400, { 'Content-Type': 'text/plain' });
+        res.writeHead(400, { 'Content-Type': 'application/json' });
         res.write(JSON.stringify({ error: 'invalid request: body required' }));
       }
       res.writeHead(400, { 'Content-Type': 'text/plain' });
-      res.write('BAD REQUEST', err);
+      res.write('BAD REQUEST', err); 
       res.end();
       return undefined;
     });
